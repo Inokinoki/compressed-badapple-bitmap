@@ -22,7 +22,9 @@ with open("BA.bin", "wb") as output_file:
             output_file.write(struct.pack("<I", 0x7FFFFFFF))
         else:
             diff_pixels = current_frame - prev_intra_frame
-            diff = int(np.count_nonzero(current_frame - prev_intra_frame) / 3)
+            diff = int(np.count_nonzero(diff_pixels) / 3)
+            diff_pixels_rev = prev_intra_frame - current_frame
+            diff += int(np.count_nonzero(diff_pixels_rev) / 3)
             sum += diff
             if diff == 0:
                 # No difference
@@ -32,7 +34,7 @@ with open("BA.bin", "wb") as output_file:
                 print("Not key frame {}".format(i))
                 for xi in range(diff_pixels.shape[1]):
                     for yi in range(diff_pixels.shape[0]):
-                        if diff_pixels[yi, xi] >= 128:
+                        if diff_pixels[yi, xi] >= 128 or diff_pixels_rev[yi, xi] >= 128:
                             # print(yi, xi, diff_pixels[yi, xi])
                             output_file.write(struct.pack("<I", 0x80000000 | (xi << 16) | yi))
             output_file.write(struct.pack("<I", 0xFFFFFFFF))
