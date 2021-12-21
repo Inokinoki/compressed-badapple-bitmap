@@ -15,7 +15,9 @@ with open("BA.bin", "rb") as input_file:
                     frame_counter += 1
                 else:
                     # print("Patch prev frame")
-                    pass
+                    patchX = ((v & 0x7FFF0000) >> 16)
+                    patchY = (v & 0x7FFF)
+                    print(patchX, patchY)
             else:
                 # print("Read frame")
                 frame_counter += 1
