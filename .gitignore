@@ -1,3 +1,6 @@
 BadAppleAllFrames/*.bmp
 *.log
 .vscode
+
+*BadAppleIFramesOutput*/
+*.bin
