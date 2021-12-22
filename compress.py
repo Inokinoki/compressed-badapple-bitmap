@@ -39,9 +39,10 @@ with open("BA.bin", "wb") as output_file:
                         if diff_pixels[yi, xi] >= int(256 / GRAY_SCALE) or diff_pixels_rev[yi, xi] >= int(256 / GRAY_SCALE):
                             # print(yi, xi, diff_pixels[yi, xi])
                             gray_scale = (int(current_frame[yi, xi] / GRAY_SCALE) & (GRAY_SCALE - 1))
-                            output_file.write(struct.pack("<I", 0x80000000 | (gray_scale << 28) | (xi << 16) | yi))
-                            # Modify current_frame
-                            current_frame[yi, xi] = (gray_scale * 256 / GRAY_SCALE)
+                            if diff_pixels[yi, xi] >= int(256 / GRAY_SCALE * 6) or diff_pixels_rev[yi, xi] >= int(256 / GRAY_SCALE * 6):
+                                output_file.write(struct.pack("<I", 0x80000000 | (gray_scale << 28) | (xi << 16) | yi))
+                                # Modify current_frame
+                                current_frame[yi, xi] = (gray_scale * 256 / GRAY_SCALE)
             output_file.write(struct.pack("<I", 0xFFFFFFFF))
             # print(diff_pixels)
             prev_intra_frame = current_frame
